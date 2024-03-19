@@ -5,8 +5,8 @@
 <ul>
     @foreach ($response->results as $result)
         <li>
-            {{ $result->trackName }} by {{ $result->artistName }}
-            on {{ isset($result->collectionName) ? $result->collectionName : "N/A" }}
+            {{$result->trackName ?? "Missing track name"}} by {{ $result->artistName }}
+            on {{ $result->collectionName ?? "N/A" }}
         </li>
     @endforeach
 </ul>

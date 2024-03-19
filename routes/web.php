@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Cache;
 
 Route::get('/', function () {
     return view('welcome');
@@ -8,12 +9,15 @@ Route::get('/', function () {
 
 Route::get('/itunes', function (Request $request) {
 
-    $term = urlencode('Iya Terra');
-    $response = Http::get("https://itunes.apple.com/search?term=$term");
+    $term = urlencode('Emancipator'); 
+    $cacheKey = "itunes-api-$term";
+    $seconds = 60;
 
-    // dd($response->object());
+    $response = Cache::remember($cacheKey, $seconds, function () use ($term) {
+        return Http::get("https://itunes.apple.com/search?term=$term")->object();
+    });
 
     return view('api.itunes', [
-        'response' => $response->object(),
+        'response' => $response,
     ]);
 });
